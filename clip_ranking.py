@@ -4,21 +4,30 @@ from PIL import Image
 import PIL.ImageOps    
 import argparse
 from glob import glob
+import os
 import os.path as op
 import numpy as np
 from ipdb import set_trace
 import skimage.io as io
+from skimage.color import rgba2rgb
 from skimage.transform import rotate, AffineTransform, warp
 from skimage.util import random_noise, img_as_ubyte
 from skimage.filters import gaussian
 import matplotlib.pyplot as plt 
+import time
+from tqdm import tqdm
 plt.ion()
+
+from utils import *
 
 
 parser = argparse.ArgumentParser(description='Ranking images and desriptions with CLIP')
-parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/clip/stims/', help='root path')
+parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
 parser.add_argument('-f', '--folder', default='scene', help='stimuli folder')
 parser.add_argument('--remove-sides', action='store_true', help='remove left and right, just and "X and Y"')
+parser.add_argument('-s', '--save-embs', action='store_true', help='remove left and right, just and "X and Y"')
+parser.add_argument('--embs-out-fn', default='v2', help='output directory for embeddings')
+parser.add_argument('-w', '--overwrite', action='store_true', help='whether to overwrite the output directory or not')
 args = parser.parse_args()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -29,13 +38,24 @@ print("Model parameters:", f"{np.sum([int(np.prod(p.shape)) for p in model.param
 print("Input resolution:", model.visual.input_resolution)
 print("Context length:", model.context_length)
 
-all_img_fns = glob(f"{args.root_path}/{args.folder}/*")
-# all_captions = [op.basename(fn[0:-4]) for fn in all_img_fns] 
-all_captions = [f"{op.basename(fn[0:-4])}"[2::].lower() for fn in all_img_fns] # remove first 2 char (= 'a ')
-# all_captions = [cap.replace("a ", "").replace("to the ", "") for cap in all_captions]
-# all_captions = [cap.replace("to the ", "") for cap in all_captions]
-# all_captions = [cap.replace("to the right of", "on the right of").replace("to the left of", "on the left of") for cap in all_captions]
-# print(all_img_fns)
+if args.save_embs:
+    out_dir = f"{args.root_path}/embeddings/{args.embs_out_fn}"
+    if op.exists(out_dir):
+        if args.overwrite:
+            print(f"Output directory already exists ... overwriting")
+        else:
+            print(f"Output directory already exists and args.overwrite is set to False ... exiting")
+            exit()
+    else:
+        os.makedirs(out_dir)
+
+all_img_fns = glob(f"{args.root_path}/original_images/{args.folder}/*")
+all_img_fns = [f"{op.basename(fn)}" for fn in all_img_fns]
+# all_img_fns = augment_text_with_colors(all_img_fns)
+all_captions = [fn[2:-4].lower() for fn in all_img_fns] # remove first 2 char (= 'a ')
+all_folders = glob(f"{op.dirname(args.root_path)}/images/*")
+all_folders = [f"{op.basename(fn)}" for fn in all_folders]
+print(f"Found {len(all_folders)} folders of images")
 # print(all_captions)
 separator = " to the X of a "
 
@@ -43,16 +63,6 @@ if args.remove_sides:
     all_captions = [cap.replace("to the right of", "next to").replace("to the left of", "next to") for cap in all_captions]
     separator = " next to a "
 
-def get_inverse_sentence(sentence, sep):
-    # gets the mirror image sentence
-    if "X" in sep: sep = sep.replace("X", "right") if "right" in sentence else sep.replace("X", "left")
-    first, second = sentence.split(sep)
-    mirror_sent = sep.join([second, first])
-    if "right" in sentence:
-        mirror_sent = mirror_sent.replace("right", "left")
-    elif "left" in sentence:
-        mirror_sent = mirror_sent.replace("left", "right")
-    return mirror_sent
 
 # get all correct labels for each image: the "classic" one and the one resulting from inversing the relation (left/right)
 all_labels = []
@@ -62,8 +72,6 @@ for i, cap in enumerate(all_captions):
     for idx in [i for i, x in enumerate(all_captions) if x == mirror_sent]:
         all_labels[-1].append(idx)
 all_labels = torch.tensor(all_labels)
-# set_trace()
-# set_trace()
 # np.random.shuffle(all_captions)
 
 # all_captions = [cap.replace("to the right of", "on the right-hand side.").replace("to the left of", "on the left-hand side.") for cap in all_captions]
@@ -82,7 +90,95 @@ templates = ["a bad photo of a {}.",
              "art of a {}.",
              "a drawing of a {}.",
              "a photo of a small {}."]
-# templates = [
+
+zeroshot_weights = zeroshot_classifier(all_captions, templates, model=model, device=device)
+# print(zeroshot_weights.shape)
+
+all_image_features = []
+for folder in tqdm(all_folders):
+    start = time.time()
+    images = []
+    for i, img_fn in enumerate(all_img_fns):
+        # print(f"{args.root_path}/images/{folder}/{img_fn}")
+        image = Image.open(f"{args.root_path}/images/{folder}/{img_fn}")
+        image = preprocess(image).to(device)
+        images.append(image)
+
+    images = torch.stack(images)
+            
+    # predict
+    with torch.no_grad():
+        image_features = model.encode_image(images)
+        image_features /= image_features.norm(dim=-1, keepdim=True)
+    all_image_features.append(image_features.cpu())
+
+    # print(f"took {time.time() - start:.2f}s on device {device}")
+
+if args.save_embs:
+    embs_to_save = np.array([emb.numpy() for emb in all_image_features])
+    np.save(f"{out_dir}/embs.npy", embs_to_save)
+
+image_features = torch.mean(torch.stack(all_image_features), 0)
+logits = 100. * image_features @ zeroshot_weights
+
+# measure accuracy
+topk = (1,2,3,5,10)
+accs = accuracy(logits.to(device), all_labels.to(device), topk=topk)
+
+        # all_probs = []
+        # for noise in np.random.randn(20): #add random noise to the image
+        #     noise = np.abs(noise) #np.clip(noise, -.5, .5)
+        #     transf_image = img_as_ubyte(random_noise(image,var=noise/10**2))
+        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
+        #     img_feat = model.encode_image(final_image)
+        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
+        #     logits = 100. * img_feat @ zeroshot_weights
+        #     # logits_per_image, logits_per_text = model(final_image, text)
+        #     # probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+        #     all_probs.append(logits)
+        # for angle in np.random.randint(-25, 25, size=10):
+        #     transf_image = img_as_ubyte(rotate(image, angle=angle, mode='wrap'))
+        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
+        #     img_feat = model.encode_image(final_image)
+        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
+        #     logits = 100. * img_feat @ zeroshot_weights
+        #     # logits_per_image, logits_per_text = model(final_image, text)
+        #     # probs = logits_per_image.softmax(dim=-1).numpy()
+        #     all_probs.append(logits)
+        # for transl in np.random.randint(-45, 45, size=20):
+        #     transform = AffineTransform(translation=(transl,transl))
+        #     wrapShift = img_as_ubyte(warp(image,transform,mode='wrap'))
+        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
+        #     img_feat = model.encode_image(final_image)
+        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
+        #     logits = 100. * img_feat @ zeroshot_weights
+        #     # logits_per_image, logits_per_text = model(final_image, text)
+        #     # probs = logits_per_image.softmax(dim=-1).numpy()
+        #     all_probs.append(logits)
+        # logits = torch.mean(torch.stack(all_probs), 0)
+
+for i, k in enumerate(topk):
+    top = (accs[i] / len(all_captions)) * 100
+    print(f"Top-{k} accuracy: {top:.2f}")
+
+
+
+
+        # image = io.imread(img_fn) # Image.fromarray(
+        # crop1 = image.shape[0] // 2 - 384 // 2
+        # crop2 = image.shape[1] // 2 - 384 // 2
+        # image = Image.fromarray(image[crop1:crop1+384, crop2:crop2+384])
+        # image = Image.open(img_fn)
+        # set_trace()
+        # r,g,b,a = image.split()
+        # image2 = Image.merge('RGB', (r,g,b))
+        # set_trace()
+        # image = PIL.ImageOps.invert(rgb_image)
+        # set_trace()
+
+
+
+        # templates = [
 #     'a bad photo of a {}.',
 #     'a sculpture of a {}.',
 #     'a photo of a hard to see {}.',
@@ -157,99 +253,3 @@ templates = ["a bad photo of a {}.",
 #     'a photo of a small {}.',
 #     'a tattoo of a {}.',
 # ]   
-
-def zeroshot_classifier(classnames, templates):
-    with torch.no_grad():
-        zeroshot_weights = []
-        # for classname in tqdm(classnames):
-        for classname in classnames:
-            texts = [template.format(classname) for template in templates] #format with class
-            if not zeroshot_weights: print(texts)
-            texts = clip.tokenize(texts).cuda() #tokenize
-            class_embeddings = model.encode_text(texts) #embed with text encoder
-            class_embeddings /= class_embeddings.norm(dim=-1, keepdim=True)
-            class_embedding = class_embeddings.mean(dim=0)
-            class_embedding /= class_embedding.norm()
-            zeroshot_weights.append(class_embedding)
-        zeroshot_weights = torch.stack(zeroshot_weights, dim=1).cuda()
-    return zeroshot_weights
-
-zeroshot_weights = zeroshot_classifier(all_captions, templates)
-# print(zeroshot_weights.shape)
-
-def accuracy(output, all_targets, topk=(1,)):
-    pred = output.topk(max(topk), 1, True, True)[1].t()
-    all_corrects = []
-    for i in range(all_targets.shape[1]): # nb of possible label for each image
-        correct = pred.eq(all_targets[:,i].view(1, -1).expand_as(pred))
-        all_corrects.append(correct)
-    correct = torch.logical_or(*all_corrects)
-    # remove duplicate for top>1
-    correct = correct.cumsum(axis=0).cumsum(axis=0) == 1 
-    return [float(correct[:k].reshape(-1).float().sum(0, keepdim=True).cpu().numpy()) for k in topk]
-
-images = []
-for i, (img_fn, caption) in enumerate(zip(all_img_fns, all_captions)):
-    image = Image.fromarray(io.imread(img_fn))
-    image = preprocess(image).cuda()
-    images.append(image)
-
-images = torch.stack(images)
-    # image = io.imread(img_fn) # Image.fromarray(
-    # crop1 = image.shape[0] // 2 - 384 // 2
-    # crop2 = image.shape[1] // 2 - 384 // 2
-    # image = Image.fromarray(image[crop1:crop1+384, crop2:crop2+384])
-    # image = Image.open(img_fn)
-    # set_trace()
-    # r,g,b,a = image.split()
-    # image2 = Image.merge('RGB', (r,g,b))
-    # set_trace()
-    # image = PIL.ImageOps.invert(rgb_image)
-    # set_trace()
-        
-    # predict
-with torch.no_grad():
-    image_features = model.encode_image(images)
-    image_features /= image_features.norm(dim=-1, keepdim=True)
-    logits = 100. * image_features @ zeroshot_weights
-
-    # measure accuracy
-    topk = (1,2,3,5,10)
-    accs = accuracy(logits, all_labels.cuda(), topk=topk)
-
-        # all_probs = []
-        # for noise in np.random.randn(20): #add random noise to the image
-        #     noise = np.abs(noise) #np.clip(noise, -.5, .5)
-        #     transf_image = img_as_ubyte(random_noise(image,var=noise/10**2))
-        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
-        #     img_feat = model.encode_image(final_image)
-        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
-        #     logits = 100. * img_feat @ zeroshot_weights
-        #     # logits_per_image, logits_per_text = model(final_image, text)
-        #     # probs = logits_per_image.softmax(dim=-1).cpu().numpy()
-        #     all_probs.append(logits)
-        # for angle in np.random.randint(-25, 25, size=10):
-        #     transf_image = img_as_ubyte(rotate(image, angle=angle, mode='wrap'))
-        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
-        #     img_feat = model.encode_image(final_image)
-        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
-        #     logits = 100. * img_feat @ zeroshot_weights
-        #     # logits_per_image, logits_per_text = model(final_image, text)
-        #     # probs = logits_per_image.softmax(dim=-1).numpy()
-        #     all_probs.append(logits)
-        # for transl in np.random.randint(-45, 45, size=20):
-        #     transform = AffineTransform(translation=(transl,transl))
-        #     wrapShift = img_as_ubyte(warp(image,transform,mode='wrap'))
-        #     final_image = preprocess(Image.fromarray(transf_image)).unsqueeze(0).to(device)
-        #     img_feat = model.encode_image(final_image)
-        #     img_feat /= img_feat.norm(dim=-1, keepdim=True)
-        #     logits = 100. * img_feat @ zeroshot_weights
-        #     # logits_per_image, logits_per_text = model(final_image, text)
-        #     # probs = logits_per_image.softmax(dim=-1).numpy()
-        #     all_probs.append(logits)
-        # logits = torch.mean(torch.stack(all_probs), 0)
-
-for i, k in enumerate(topk):
-    top = (accs[i] / len(all_captions)) * 100
-    print(f"Top-{k} accuracy: {top:.2f}")
-
