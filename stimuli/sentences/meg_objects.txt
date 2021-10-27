@@ -1,0 +1,9 @@
+A blue circle
+A blue square
+A blue triangle
+A green circle
+A green square
+A green triangle
+A red circle
+A red square
+A red triangle
