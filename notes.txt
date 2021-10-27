@@ -1,1 +1,9 @@
 v2: adding many new colors
+
+
+PCA, final timepoint, 2D plot.
+remake data structure - change path in all scripts.
+general script to extract embs
+
+
+Yair: behavioral + stim gen

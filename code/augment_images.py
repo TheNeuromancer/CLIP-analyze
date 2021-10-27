@@ -21,7 +21,7 @@ parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes
 parser.add_argument('-f', '--folder', default='scene', help='stimuli folder')
 args = parser.parse_args()
 
-all_img_fns = glob(f"{args.root_path}/stimuli/original_images/{args.folder}/*")
+all_img_fns = glob(f"{args.root_path}/{args.folder}/*")
 
 np.random.seed(42)
 

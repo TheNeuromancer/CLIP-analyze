@@ -60,8 +60,8 @@ elif args.cat_or_last == "last":
 
 
 method = PCA(args.dims) if args.method=="PCA" else MDS(args.dims, dissimilarity='precomputed')
-# scaler = RobustScaler()
-# X = scaler.fit_transform(X)
+scaler = RobustScaler()
+X = scaler.fit_transform(X)
 X_for_pca = scaler.fit_transform(X_for_pca)
 
 df = fns2pandas(all_img_fns)
@@ -78,6 +78,7 @@ reduc_X = reduc_X.reshape((-1, seq_length, args.dims))
 
 # additional_colors = ["red", "green", "blue", "yellow", "brown", "purple", "orange", "pink", "gold", "gray"]
 
+print(float('inf'))
 
 ## all PCs plots
 # Mirror images

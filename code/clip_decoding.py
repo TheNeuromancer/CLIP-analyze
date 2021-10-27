@@ -22,7 +22,7 @@ from utils import *
 
 parser = argparse.ArgumentParser(description='Decoding from CLIP embeddings')
 parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
-parser.add_argument('-f', '--emb-folder', default='embeddings/', help='input folder')
+parser.add_argument('-f', '--folder', default='embeddings/', help='stimuli folder')
 parser.add_argument('-v', '--version', default='hug_v2/', help='script version')
 parser.add_argument('-i', '--in-file', default='all_txt_embs', help='input file')
 parser.add_argument('-q', '--query', default='all', help='pandas query to decode, eg left_shape=="square" and right_color=="blue" of "all"')
@@ -32,7 +32,7 @@ parser.add_argument('-l', '--layer', default=12, help='layer number to consider'
 parser.add_argument('--cat-or-last', default='last', help='whether to use all sequence element or just the last [CLS] token')
 args = parser.parse_args()
 
-all_img_fns = glob(f"{args.root_path}/{args.emb_folder}/original_images/scene/*")
+all_img_fns = glob(f"{args.root_path}/original_images/scene/*")
 all_img_fns = [f"{op.basename(fn)}" for fn in all_img_fns]
 all_img_fns = augment_text_with_colors(all_img_fns, args.ncolors)
 all_captions = [fn[2:-4].lower() for fn in all_img_fns] # remove first 2 char (= 'a ')

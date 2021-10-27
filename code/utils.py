@@ -236,7 +236,6 @@ def encode(X, y, pipeline, cv):
     for train, test in cv.split(X, y):
         pipeline.fit(X[train, :], y[train])
         pred = pipeline.predict(X[test, :])
-        # r += roc_auc_score(y_true=y[test], y_score=pred) / n_folds
         for d in range(n_units):
             all_Rs[d] += pearsonr(y[test, d], pred[:, d])[0] / n_folds
             all_R2s[d] += r2_score(y[test, d], pred[:, d]) / n_folds
