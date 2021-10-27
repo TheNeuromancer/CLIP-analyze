@@ -35,9 +35,11 @@ for modifiers in [None, '', 'color', 'size',
     # which have modifiers as specificed by modifiers.
     # If modifiers is an empty list '', then nouns will be composed of heads
     # only.
-    if modifiers is not None: # All combinations
+    # If modifiers is None,
+    # then all possible combinations of nouns are generated
+    if modifiers is not None: 
         str_modifiers = modifiers
-    else:
+    else: # All combinations
         str_modifiers = 'all_combinations'
     fn = f'../stimuli/text/modifiers_{str_modifiers}.txt'
     
