@@ -2,6 +2,7 @@ embeddings/
 results/
 images/
 original_images
+stimuli/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

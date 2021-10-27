@@ -43,7 +43,10 @@ class Stimuli():
         
         # features dict must have a single head
         assert ('head' in features.keys()) and len(features['head'].keys())==1
-    
+
+        self.nouns = None   
+        self.scenes = []
+        
         self.verbose = verbose
 
 
@@ -83,23 +86,23 @@ class Stimuli():
             
             
         
-            # Loop over all head values
-            # E.g., 'A blue small circle', 'A blue small triangle', ...
-            nouns['_'.join(set_modifiers)] = []
-            for head_value in self.features['head'][head_feature]:
-                for modifier_value_combination in modifier_value_combinations:
-                    str_modifiers = ' '.join(modifier_value_combination)                
-                    if str_modifiers:
-                        noun = f'A {str_modifiers} {head_value}'
-                    else:
-                        noun = f'A {head_value}'
-                    nouns['_'.join(set_modifiers)].append(noun)
-                    if self.verbose:
-                        print(noun)
+                # Loop over all head values
+                # E.g., 'A blue small circle', 'A blue small triangle', ...
+                nouns['_'.join(ordered_list_modifiers)] = []
+                for head_value in self.features['head'][head_feature]:
+                    for modifier_value_combination in modifier_value_combinations:
+                        str_modifiers = ' '.join(modifier_value_combination)                
+                        if str_modifiers:
+                            noun = f'A {str_modifiers} {head_value}'
+                        else:
+                            noun = f'A {head_value}'
+                        nouns['_'.join(ordered_list_modifiers)].append(noun)
+                        if self.verbose:
+                            print(noun)
         self.nouns = nouns
             
                 
-    def add_scenes(self):
+    def add_scenes(self, modifiers=None):
         '''
         
 
@@ -108,24 +111,22 @@ class Stimuli():
         Apped scenes to class object.
 
         '''
-        scenes = []
+        if modifiers is None:
+            modifier_list = list(self.nouns.keys())
+        else:
+            modifier_list = [modifiers]
+        nouns = []
+        for key in modifier_list:
+            nouns.extend(self.nouns[key])
         
+        noun_pairs = list(itertools.product(nouns, repeat=2))
+        for noun_pair in noun_pairs:
+            for relation in self.relations:
+                scene = f"{noun_pair[0]} {relation} {noun_pair[1]}".lower()
+                if self.verbose:
+                    print(scene)
+                self.scenes.append(scene)
         
-        modifiers = list(self.features['modifier'].keys())
-        powerset_modifiers = list(powerset(modifiers))
-        
-        for set_modifiers in powerset_modifiers: 
-            nouns = self.nouns['_'.join(set_modifiers)]
-            nouns_in_scence = list(itertools.product(nouns, repeat=2))
-            for noun_pair in nouns_in_scence:
-                for relation in self.relations:
-                    scene = f"{noun_pair[0]} {relation} {noun_pair[1]}".lower()
-                    if self.verbose:
-                        print(scene)
-                    scenes.append(scene)
-        
-        
-        self.scenes = scenes
         
     
     def to_txt(self, fn):
