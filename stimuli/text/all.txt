@@ -1,0 +1,900 @@
+a triangle is left to a triangle
+a triangle is right to a triangle
+a triangle is left to a circle
+a triangle is right to a circle
+a triangle is left to a square
+a triangle is right to a square
+a circle is left to a triangle
+a circle is right to a triangle
+a circle is left to a circle
+a circle is right to a circle
+a circle is left to a square
+a circle is right to a square
+a square is left to a triangle
+a square is right to a triangle
+a square is left to a circle
+a square is right to a circle
+a square is left to a square
+a square is right to a square
+a blue triangle is left to a blue triangle
+a blue triangle is right to a blue triangle
+a blue triangle is left to a red triangle
+a blue triangle is right to a red triangle
+a blue triangle is left to a green triangle
+a blue triangle is right to a green triangle
+a blue triangle is left to a blue circle
+a blue triangle is right to a blue circle
+a blue triangle is left to a red circle
+a blue triangle is right to a red circle
+a blue triangle is left to a green circle
+a blue triangle is right to a green circle
+a blue triangle is left to a blue square
+a blue triangle is right to a blue square
+a blue triangle is left to a red square
+a blue triangle is right to a red square
+a blue triangle is left to a green square
+a blue triangle is right to a green square
+a red triangle is left to a blue triangle
+a red triangle is right to a blue triangle
+a red triangle is left to a red triangle
+a red triangle is right to a red triangle
+a red triangle is left to a green triangle
+a red triangle is right to a green triangle
+a red triangle is left to a blue circle
+a red triangle is right to a blue circle
+a red triangle is left to a red circle
+a red triangle is right to a red circle
+a red triangle is left to a green circle
+a red triangle is right to a green circle
+a red triangle is left to a blue square
+a red triangle is right to a blue square
+a red triangle is left to a red square
+a red triangle is right to a red square
+a red triangle is left to a green square
+a red triangle is right to a green square
+a green triangle is left to a blue triangle
+a green triangle is right to a blue triangle
+a green triangle is left to a red triangle
+a green triangle is right to a red triangle
+a green triangle is left to a green triangle
+a green triangle is right to a green triangle
+a green triangle is left to a blue circle
+a green triangle is right to a blue circle
+a green triangle is left to a red circle
+a green triangle is right to a red circle
+a green triangle is left to a green circle
+a green triangle is right to a green circle
+a green triangle is left to a blue square
+a green triangle is right to a blue square
+a green triangle is left to a red square
+a green triangle is right to a red square
+a green triangle is left to a green square
+a green triangle is right to a green square
+a blue circle is left to a blue triangle
+a blue circle is right to a blue triangle
+a blue circle is left to a red triangle
+a blue circle is right to a red triangle
+a blue circle is left to a green triangle
+a blue circle is right to a green triangle
+a blue circle is left to a blue circle
+a blue circle is right to a blue circle
+a blue circle is left to a red circle
+a blue circle is right to a red circle
+a blue circle is left to a green circle
+a blue circle is right to a green circle
+a blue circle is left to a blue square
+a blue circle is right to a blue square
+a blue circle is left to a red square
+a blue circle is right to a red square
+a blue circle is left to a green square
+a blue circle is right to a green square
+a red circle is left to a blue triangle
+a red circle is right to a blue triangle
+a red circle is left to a red triangle
+a red circle is right to a red triangle
+a red circle is left to a green triangle
+a red circle is right to a green triangle
+a red circle is left to a blue circle
+a red circle is right to a blue circle
+a red circle is left to a red circle
+a red circle is right to a red circle
+a red circle is left to a green circle
+a red circle is right to a green circle
+a red circle is left to a blue square
+a red circle is right to a blue square
+a red circle is left to a red square
+a red circle is right to a red square
+a red circle is left to a green square
+a red circle is right to a green square
+a green circle is left to a blue triangle
+a green circle is right to a blue triangle
+a green circle is left to a red triangle
+a green circle is right to a red triangle
+a green circle is left to a green triangle
+a green circle is right to a green triangle
+a green circle is left to a blue circle
+a green circle is right to a blue circle
+a green circle is left to a red circle
+a green circle is right to a red circle
+a green circle is left to a green circle
+a green circle is right to a green circle
+a green circle is left to a blue square
+a green circle is right to a blue square
+a green circle is left to a red square
+a green circle is right to a red square
+a green circle is left to a green square
+a green circle is right to a green square
+a blue square is left to a blue triangle
+a blue square is right to a blue triangle
+a blue square is left to a red triangle
+a blue square is right to a red triangle
+a blue square is left to a green triangle
+a blue square is right to a green triangle
+a blue square is left to a blue circle
+a blue square is right to a blue circle
+a blue square is left to a red circle
+a blue square is right to a red circle
+a blue square is left to a green circle
+a blue square is right to a green circle
+a blue square is left to a blue square
+a blue square is right to a blue square
+a blue square is left to a red square
+a blue square is right to a red square
+a blue square is left to a green square
+a blue square is right to a green square
+a red square is left to a blue triangle
+a red square is right to a blue triangle
+a red square is left to a red triangle
+a red square is right to a red triangle
+a red square is left to a green triangle
+a red square is right to a green triangle
+a red square is left to a blue circle
+a red square is right to a blue circle
+a red square is left to a red circle
+a red square is right to a red circle
+a red square is left to a green circle
+a red square is right to a green circle
+a red square is left to a blue square
+a red square is right to a blue square
+a red square is left to a red square
+a red square is right to a red square
+a red square is left to a green square
+a red square is right to a green square
+a green square is left to a blue triangle
+a green square is right to a blue triangle
+a green square is left to a red triangle
+a green square is right to a red triangle
+a green square is left to a green triangle
+a green square is right to a green triangle
+a green square is left to a blue circle
+a green square is right to a blue circle
+a green square is left to a red circle
+a green square is right to a red circle
+a green square is left to a green circle
+a green square is right to a green circle
+a green square is left to a blue square
+a green square is right to a blue square
+a green square is left to a red square
+a green square is right to a red square
+a green square is left to a green square
+a green square is right to a green square
+a small triangle is left to a small triangle
+a small triangle is right to a small triangle
+a small triangle is left to a big triangle
+a small triangle is right to a big triangle
+a small triangle is left to a small circle
+a small triangle is right to a small circle
+a small triangle is left to a big circle
+a small triangle is right to a big circle
+a small triangle is left to a small square
+a small triangle is right to a small square
+a small triangle is left to a big square
+a small triangle is right to a big square
+a big triangle is left to a small triangle
+a big triangle is right to a small triangle
+a big triangle is left to a big triangle
+a big triangle is right to a big triangle
+a big triangle is left to a small circle
+a big triangle is right to a small circle
+a big triangle is left to a big circle
+a big triangle is right to a big circle
+a big triangle is left to a small square
+a big triangle is right to a small square
+a big triangle is left to a big square
+a big triangle is right to a big square
+a small circle is left to a small triangle
+a small circle is right to a small triangle
+a small circle is left to a big triangle
+a small circle is right to a big triangle
+a small circle is left to a small circle
+a small circle is right to a small circle
+a small circle is left to a big circle
+a small circle is right to a big circle
+a small circle is left to a small square
+a small circle is right to a small square
+a small circle is left to a big square
+a small circle is right to a big square
+a big circle is left to a small triangle
+a big circle is right to a small triangle
+a big circle is left to a big triangle
+a big circle is right to a big triangle
+a big circle is left to a small circle
+a big circle is right to a small circle
+a big circle is left to a big circle
+a big circle is right to a big circle
+a big circle is left to a small square
+a big circle is right to a small square
+a big circle is left to a big square
+a big circle is right to a big square
+a small square is left to a small triangle
+a small square is right to a small triangle
+a small square is left to a big triangle
+a small square is right to a big triangle
+a small square is left to a small circle
+a small square is right to a small circle
+a small square is left to a big circle
+a small square is right to a big circle
+a small square is left to a small square
+a small square is right to a small square
+a small square is left to a big square
+a small square is right to a big square
+a big square is left to a small triangle
+a big square is right to a small triangle
+a big square is left to a big triangle
+a big square is right to a big triangle
+a big square is left to a small circle
+a big square is right to a small circle
+a big square is left to a big circle
+a big square is right to a big circle
+a big square is left to a small square
+a big square is right to a small square
+a big square is left to a big square
+a big square is right to a big square
+a small blue triangle is left to a small blue triangle
+a small blue triangle is right to a small blue triangle
+a small blue triangle is left to a small red triangle
+a small blue triangle is right to a small red triangle
+a small blue triangle is left to a small green triangle
+a small blue triangle is right to a small green triangle
+a small blue triangle is left to a big blue triangle
+a small blue triangle is right to a big blue triangle
+a small blue triangle is left to a big red triangle
+a small blue triangle is right to a big red triangle
+a small blue triangle is left to a big green triangle
+a small blue triangle is right to a big green triangle
+a small blue triangle is left to a small blue circle
+a small blue triangle is right to a small blue circle
+a small blue triangle is left to a small red circle
+a small blue triangle is right to a small red circle
+a small blue triangle is left to a small green circle
+a small blue triangle is right to a small green circle
+a small blue triangle is left to a big blue circle
+a small blue triangle is right to a big blue circle
+a small blue triangle is left to a big red circle
+a small blue triangle is right to a big red circle
+a small blue triangle is left to a big green circle
+a small blue triangle is right to a big green circle
+a small blue triangle is left to a small blue square
+a small blue triangle is right to a small blue square
+a small blue triangle is left to a small red square
+a small blue triangle is right to a small red square
+a small blue triangle is left to a small green square
+a small blue triangle is right to a small green square
+a small blue triangle is left to a big blue square
+a small blue triangle is right to a big blue square
+a small blue triangle is left to a big red square
+a small blue triangle is right to a big red square
+a small blue triangle is left to a big green square
+a small blue triangle is right to a big green square
+a small red triangle is left to a small blue triangle
+a small red triangle is right to a small blue triangle
+a small red triangle is left to a small red triangle
+a small red triangle is right to a small red triangle
+a small red triangle is left to a small green triangle
+a small red triangle is right to a small green triangle
+a small red triangle is left to a big blue triangle
+a small red triangle is right to a big blue triangle
+a small red triangle is left to a big red triangle
+a small red triangle is right to a big red triangle
+a small red triangle is left to a big green triangle
+a small red triangle is right to a big green triangle
+a small red triangle is left to a small blue circle
+a small red triangle is right to a small blue circle
+a small red triangle is left to a small red circle
+a small red triangle is right to a small red circle
+a small red triangle is left to a small green circle
+a small red triangle is right to a small green circle
+a small red triangle is left to a big blue circle
+a small red triangle is right to a big blue circle
+a small red triangle is left to a big red circle
+a small red triangle is right to a big red circle
+a small red triangle is left to a big green circle
+a small red triangle is right to a big green circle
+a small red triangle is left to a small blue square
+a small red triangle is right to a small blue square
+a small red triangle is left to a small red square
+a small red triangle is right to a small red square
+a small red triangle is left to a small green square
+a small red triangle is right to a small green square
+a small red triangle is left to a big blue square
+a small red triangle is right to a big blue square
+a small red triangle is left to a big red square
+a small red triangle is right to a big red square
+a small red triangle is left to a big green square
+a small red triangle is right to a big green square
+a small green triangle is left to a small blue triangle
+a small green triangle is right to a small blue triangle
+a small green triangle is left to a small red triangle
+a small green triangle is right to a small red triangle
+a small green triangle is left to a small green triangle
+a small green triangle is right to a small green triangle
+a small green triangle is left to a big blue triangle
+a small green triangle is right to a big blue triangle
+a small green triangle is left to a big red triangle
+a small green triangle is right to a big red triangle
+a small green triangle is left to a big green triangle
+a small green triangle is right to a big green triangle
+a small green triangle is left to a small blue circle
+a small green triangle is right to a small blue circle
+a small green triangle is left to a small red circle
+a small green triangle is right to a small red circle
+a small green triangle is left to a small green circle
+a small green triangle is right to a small green circle
+a small green triangle is left to a big blue circle
+a small green triangle is right to a big blue circle
+a small green triangle is left to a big red circle
+a small green triangle is right to a big red circle
+a small green triangle is left to a big green circle
+a small green triangle is right to a big green circle
+a small green triangle is left to a small blue square
+a small green triangle is right to a small blue square
+a small green triangle is left to a small red square
+a small green triangle is right to a small red square
+a small green triangle is left to a small green square
+a small green triangle is right to a small green square
+a small green triangle is left to a big blue square
+a small green triangle is right to a big blue square
+a small green triangle is left to a big red square
+a small green triangle is right to a big red square
+a small green triangle is left to a big green square
+a small green triangle is right to a big green square
+a big blue triangle is left to a small blue triangle
+a big blue triangle is right to a small blue triangle
+a big blue triangle is left to a small red triangle
+a big blue triangle is right to a small red triangle
+a big blue triangle is left to a small green triangle
+a big blue triangle is right to a small green triangle
+a big blue triangle is left to a big blue triangle
+a big blue triangle is right to a big blue triangle
+a big blue triangle is left to a big red triangle
+a big blue triangle is right to a big red triangle
+a big blue triangle is left to a big green triangle
+a big blue triangle is right to a big green triangle
+a big blue triangle is left to a small blue circle
+a big blue triangle is right to a small blue circle
+a big blue triangle is left to a small red circle
+a big blue triangle is right to a small red circle
+a big blue triangle is left to a small green circle
+a big blue triangle is right to a small green circle
+a big blue triangle is left to a big blue circle
+a big blue triangle is right to a big blue circle
+a big blue triangle is left to a big red circle
+a big blue triangle is right to a big red circle
+a big blue triangle is left to a big green circle
+a big blue triangle is right to a big green circle
+a big blue triangle is left to a small blue square
+a big blue triangle is right to a small blue square
+a big blue triangle is left to a small red square
+a big blue triangle is right to a small red square
+a big blue triangle is left to a small green square
+a big blue triangle is right to a small green square
+a big blue triangle is left to a big blue square
+a big blue triangle is right to a big blue square
+a big blue triangle is left to a big red square
+a big blue triangle is right to a big red square
+a big blue triangle is left to a big green square
+a big blue triangle is right to a big green square
+a big red triangle is left to a small blue triangle
+a big red triangle is right to a small blue triangle
+a big red triangle is left to a small red triangle
+a big red triangle is right to a small red triangle
+a big red triangle is left to a small green triangle
+a big red triangle is right to a small green triangle
+a big red triangle is left to a big blue triangle
+a big red triangle is right to a big blue triangle
+a big red triangle is left to a big red triangle
+a big red triangle is right to a big red triangle
+a big red triangle is left to a big green triangle
+a big red triangle is right to a big green triangle
+a big red triangle is left to a small blue circle
+a big red triangle is right to a small blue circle
+a big red triangle is left to a small red circle
+a big red triangle is right to a small red circle
+a big red triangle is left to a small green circle
+a big red triangle is right to a small green circle
+a big red triangle is left to a big blue circle
+a big red triangle is right to a big blue circle
+a big red triangle is left to a big red circle
+a big red triangle is right to a big red circle
+a big red triangle is left to a big green circle
+a big red triangle is right to a big green circle
+a big red triangle is left to a small blue square
+a big red triangle is right to a small blue square
+a big red triangle is left to a small red square
+a big red triangle is right to a small red square
+a big red triangle is left to a small green square
+a big red triangle is right to a small green square
+a big red triangle is left to a big blue square
+a big red triangle is right to a big blue square
+a big red triangle is left to a big red square
+a big red triangle is right to a big red square
+a big red triangle is left to a big green square
+a big red triangle is right to a big green square
+a big green triangle is left to a small blue triangle
+a big green triangle is right to a small blue triangle
+a big green triangle is left to a small red triangle
+a big green triangle is right to a small red triangle
+a big green triangle is left to a small green triangle
+a big green triangle is right to a small green triangle
+a big green triangle is left to a big blue triangle
+a big green triangle is right to a big blue triangle
+a big green triangle is left to a big red triangle
+a big green triangle is right to a big red triangle
+a big green triangle is left to a big green triangle
+a big green triangle is right to a big green triangle
+a big green triangle is left to a small blue circle
+a big green triangle is right to a small blue circle
+a big green triangle is left to a small red circle
+a big green triangle is right to a small red circle
+a big green triangle is left to a small green circle
+a big green triangle is right to a small green circle
+a big green triangle is left to a big blue circle
+a big green triangle is right to a big blue circle
+a big green triangle is left to a big red circle
+a big green triangle is right to a big red circle
+a big green triangle is left to a big green circle
+a big green triangle is right to a big green circle
+a big green triangle is left to a small blue square
+a big green triangle is right to a small blue square
+a big green triangle is left to a small red square
+a big green triangle is right to a small red square
+a big green triangle is left to a small green square
+a big green triangle is right to a small green square
+a big green triangle is left to a big blue square
+a big green triangle is right to a big blue square
+a big green triangle is left to a big red square
+a big green triangle is right to a big red square
+a big green triangle is left to a big green square
+a big green triangle is right to a big green square
+a small blue circle is left to a small blue triangle
+a small blue circle is right to a small blue triangle
+a small blue circle is left to a small red triangle
+a small blue circle is right to a small red triangle
+a small blue circle is left to a small green triangle
+a small blue circle is right to a small green triangle
+a small blue circle is left to a big blue triangle
+a small blue circle is right to a big blue triangle
+a small blue circle is left to a big red triangle
+a small blue circle is right to a big red triangle
+a small blue circle is left to a big green triangle
+a small blue circle is right to a big green triangle
+a small blue circle is left to a small blue circle
+a small blue circle is right to a small blue circle
+a small blue circle is left to a small red circle
+a small blue circle is right to a small red circle
+a small blue circle is left to a small green circle
+a small blue circle is right to a small green circle
+a small blue circle is left to a big blue circle
+a small blue circle is right to a big blue circle
+a small blue circle is left to a big red circle
+a small blue circle is right to a big red circle
+a small blue circle is left to a big green circle
+a small blue circle is right to a big green circle
+a small blue circle is left to a small blue square
+a small blue circle is right to a small blue square
+a small blue circle is left to a small red square
+a small blue circle is right to a small red square
+a small blue circle is left to a small green square
+a small blue circle is right to a small green square
+a small blue circle is left to a big blue square
+a small blue circle is right to a big blue square
+a small blue circle is left to a big red square
+a small blue circle is right to a big red square
+a small blue circle is left to a big green square
+a small blue circle is right to a big green square
+a small red circle is left to a small blue triangle
+a small red circle is right to a small blue triangle
+a small red circle is left to a small red triangle
+a small red circle is right to a small red triangle
+a small red circle is left to a small green triangle
+a small red circle is right to a small green triangle
+a small red circle is left to a big blue triangle
+a small red circle is right to a big blue triangle
+a small red circle is left to a big red triangle
+a small red circle is right to a big red triangle
+a small red circle is left to a big green triangle
+a small red circle is right to a big green triangle
+a small red circle is left to a small blue circle
+a small red circle is right to a small blue circle
+a small red circle is left to a small red circle
+a small red circle is right to a small red circle
+a small red circle is left to a small green circle
+a small red circle is right to a small green circle
+a small red circle is left to a big blue circle
+a small red circle is right to a big blue circle
+a small red circle is left to a big red circle
+a small red circle is right to a big red circle
+a small red circle is left to a big green circle
+a small red circle is right to a big green circle
+a small red circle is left to a small blue square
+a small red circle is right to a small blue square
+a small red circle is left to a small red square
+a small red circle is right to a small red square
+a small red circle is left to a small green square
+a small red circle is right to a small green square
+a small red circle is left to a big blue square
+a small red circle is right to a big blue square
+a small red circle is left to a big red square
+a small red circle is right to a big red square
+a small red circle is left to a big green square
+a small red circle is right to a big green square
+a small green circle is left to a small blue triangle
+a small green circle is right to a small blue triangle
+a small green circle is left to a small red triangle
+a small green circle is right to a small red triangle
+a small green circle is left to a small green triangle
+a small green circle is right to a small green triangle
+a small green circle is left to a big blue triangle
+a small green circle is right to a big blue triangle
+a small green circle is left to a big red triangle
+a small green circle is right to a big red triangle
+a small green circle is left to a big green triangle
+a small green circle is right to a big green triangle
+a small green circle is left to a small blue circle
+a small green circle is right to a small blue circle
+a small green circle is left to a small red circle
+a small green circle is right to a small red circle
+a small green circle is left to a small green circle
+a small green circle is right to a small green circle
+a small green circle is left to a big blue circle
+a small green circle is right to a big blue circle
+a small green circle is left to a big red circle
+a small green circle is right to a big red circle
+a small green circle is left to a big green circle
+a small green circle is right to a big green circle
+a small green circle is left to a small blue square
+a small green circle is right to a small blue square
+a small green circle is left to a small red square
+a small green circle is right to a small red square
+a small green circle is left to a small green square
+a small green circle is right to a small green square
+a small green circle is left to a big blue square
+a small green circle is right to a big blue square
+a small green circle is left to a big red square
+a small green circle is right to a big red square
+a small green circle is left to a big green square
+a small green circle is right to a big green square
+a big blue circle is left to a small blue triangle
+a big blue circle is right to a small blue triangle
+a big blue circle is left to a small red triangle
+a big blue circle is right to a small red triangle
+a big blue circle is left to a small green triangle
+a big blue circle is right to a small green triangle
+a big blue circle is left to a big blue triangle
+a big blue circle is right to a big blue triangle
+a big blue circle is left to a big red triangle
+a big blue circle is right to a big red triangle
+a big blue circle is left to a big green triangle
+a big blue circle is right to a big green triangle
+a big blue circle is left to a small blue circle
+a big blue circle is right to a small blue circle
+a big blue circle is left to a small red circle
+a big blue circle is right to a small red circle
+a big blue circle is left to a small green circle
+a big blue circle is right to a small green circle
+a big blue circle is left to a big blue circle
+a big blue circle is right to a big blue circle
+a big blue circle is left to a big red circle
+a big blue circle is right to a big red circle
+a big blue circle is left to a big green circle
+a big blue circle is right to a big green circle
+a big blue circle is left to a small blue square
+a big blue circle is right to a small blue square
+a big blue circle is left to a small red square
+a big blue circle is right to a small red square
+a big blue circle is left to a small green square
+a big blue circle is right to a small green square
+a big blue circle is left to a big blue square
+a big blue circle is right to a big blue square
+a big blue circle is left to a big red square
+a big blue circle is right to a big red square
+a big blue circle is left to a big green square
+a big blue circle is right to a big green square
+a big red circle is left to a small blue triangle
+a big red circle is right to a small blue triangle
+a big red circle is left to a small red triangle
+a big red circle is right to a small red triangle
+a big red circle is left to a small green triangle
+a big red circle is right to a small green triangle
+a big red circle is left to a big blue triangle
+a big red circle is right to a big blue triangle
+a big red circle is left to a big red triangle
+a big red circle is right to a big red triangle
+a big red circle is left to a big green triangle
+a big red circle is right to a big green triangle
+a big red circle is left to a small blue circle
+a big red circle is right to a small blue circle
+a big red circle is left to a small red circle
+a big red circle is right to a small red circle
+a big red circle is left to a small green circle
+a big red circle is right to a small green circle
+a big red circle is left to a big blue circle
+a big red circle is right to a big blue circle
+a big red circle is left to a big red circle
+a big red circle is right to a big red circle
+a big red circle is left to a big green circle
+a big red circle is right to a big green circle
+a big red circle is left to a small blue square
+a big red circle is right to a small blue square
+a big red circle is left to a small red square
+a big red circle is right to a small red square
+a big red circle is left to a small green square
+a big red circle is right to a small green square
+a big red circle is left to a big blue square
+a big red circle is right to a big blue square
+a big red circle is left to a big red square
+a big red circle is right to a big red square
+a big red circle is left to a big green square
+a big red circle is right to a big green square
+a big green circle is left to a small blue triangle
+a big green circle is right to a small blue triangle
+a big green circle is left to a small red triangle
+a big green circle is right to a small red triangle
+a big green circle is left to a small green triangle
+a big green circle is right to a small green triangle
+a big green circle is left to a big blue triangle
+a big green circle is right to a big blue triangle
+a big green circle is left to a big red triangle
+a big green circle is right to a big red triangle
+a big green circle is left to a big green triangle
+a big green circle is right to a big green triangle
+a big green circle is left to a small blue circle
+a big green circle is right to a small blue circle
+a big green circle is left to a small red circle
+a big green circle is right to a small red circle
+a big green circle is left to a small green circle
+a big green circle is right to a small green circle
+a big green circle is left to a big blue circle
+a big green circle is right to a big blue circle
+a big green circle is left to a big red circle
+a big green circle is right to a big red circle
+a big green circle is left to a big green circle
+a big green circle is right to a big green circle
+a big green circle is left to a small blue square
+a big green circle is right to a small blue square
+a big green circle is left to a small red square
+a big green circle is right to a small red square
+a big green circle is left to a small green square
+a big green circle is right to a small green square
+a big green circle is left to a big blue square
+a big green circle is right to a big blue square
+a big green circle is left to a big red square
+a big green circle is right to a big red square
+a big green circle is left to a big green square
+a big green circle is right to a big green square
+a small blue square is left to a small blue triangle
+a small blue square is right to a small blue triangle
+a small blue square is left to a small red triangle
+a small blue square is right to a small red triangle
+a small blue square is left to a small green triangle
+a small blue square is right to a small green triangle
+a small blue square is left to a big blue triangle
+a small blue square is right to a big blue triangle
+a small blue square is left to a big red triangle
+a small blue square is right to a big red triangle
+a small blue square is left to a big green triangle
+a small blue square is right to a big green triangle
+a small blue square is left to a small blue circle
+a small blue square is right to a small blue circle
+a small blue square is left to a small red circle
+a small blue square is right to a small red circle
+a small blue square is left to a small green circle
+a small blue square is right to a small green circle
+a small blue square is left to a big blue circle
+a small blue square is right to a big blue circle
+a small blue square is left to a big red circle
+a small blue square is right to a big red circle
+a small blue square is left to a big green circle
+a small blue square is right to a big green circle
+a small blue square is left to a small blue square
+a small blue square is right to a small blue square
+a small blue square is left to a small red square
+a small blue square is right to a small red square
+a small blue square is left to a small green square
+a small blue square is right to a small green square
+a small blue square is left to a big blue square
+a small blue square is right to a big blue square
+a small blue square is left to a big red square
+a small blue square is right to a big red square
+a small blue square is left to a big green square
+a small blue square is right to a big green square
+a small red square is left to a small blue triangle
+a small red square is right to a small blue triangle
+a small red square is left to a small red triangle
+a small red square is right to a small red triangle
+a small red square is left to a small green triangle
+a small red square is right to a small green triangle
+a small red square is left to a big blue triangle
+a small red square is right to a big blue triangle
+a small red square is left to a big red triangle
+a small red square is right to a big red triangle
+a small red square is left to a big green triangle
+a small red square is right to a big green triangle
+a small red square is left to a small blue circle
+a small red square is right to a small blue circle
+a small red square is left to a small red circle
+a small red square is right to a small red circle
+a small red square is left to a small green circle
+a small red square is right to a small green circle
+a small red square is left to a big blue circle
+a small red square is right to a big blue circle
+a small red square is left to a big red circle
+a small red square is right to a big red circle
+a small red square is left to a big green circle
+a small red square is right to a big green circle
+a small red square is left to a small blue square
+a small red square is right to a small blue square
+a small red square is left to a small red square
+a small red square is right to a small red square
+a small red square is left to a small green square
+a small red square is right to a small green square
+a small red square is left to a big blue square
+a small red square is right to a big blue square
+a small red square is left to a big red square
+a small red square is right to a big red square
+a small red square is left to a big green square
+a small red square is right to a big green square
+a small green square is left to a small blue triangle
+a small green square is right to a small blue triangle
+a small green square is left to a small red triangle
+a small green square is right to a small red triangle
+a small green square is left to a small green triangle
+a small green square is right to a small green triangle
+a small green square is left to a big blue triangle
+a small green square is right to a big blue triangle
+a small green square is left to a big red triangle
+a small green square is right to a big red triangle
+a small green square is left to a big green triangle
+a small green square is right to a big green triangle
+a small green square is left to a small blue circle
+a small green square is right to a small blue circle
+a small green square is left to a small red circle
+a small green square is right to a small red circle
+a small green square is left to a small green circle
+a small green square is right to a small green circle
+a small green square is left to a big blue circle
+a small green square is right to a big blue circle
+a small green square is left to a big red circle
+a small green square is right to a big red circle
+a small green square is left to a big green circle
+a small green square is right to a big green circle
+a small green square is left to a small blue square
+a small green square is right to a small blue square
+a small green square is left to a small red square
+a small green square is right to a small red square
+a small green square is left to a small green square
+a small green square is right to a small green square
+a small green square is left to a big blue square
+a small green square is right to a big blue square
+a small green square is left to a big red square
+a small green square is right to a big red square
+a small green square is left to a big green square
+a small green square is right to a big green square
+a big blue square is left to a small blue triangle
+a big blue square is right to a small blue triangle
+a big blue square is left to a small red triangle
+a big blue square is right to a small red triangle
+a big blue square is left to a small green triangle
+a big blue square is right to a small green triangle
+a big blue square is left to a big blue triangle
+a big blue square is right to a big blue triangle
+a big blue square is left to a big red triangle
+a big blue square is right to a big red triangle
+a big blue square is left to a big green triangle
+a big blue square is right to a big green triangle
+a big blue square is left to a small blue circle
+a big blue square is right to a small blue circle
+a big blue square is left to a small red circle
+a big blue square is right to a small red circle
+a big blue square is left to a small green circle
+a big blue square is right to a small green circle
+a big blue square is left to a big blue circle
+a big blue square is right to a big blue circle
+a big blue square is left to a big red circle
+a big blue square is right to a big red circle
+a big blue square is left to a big green circle
+a big blue square is right to a big green circle
+a big blue square is left to a small blue square
+a big blue square is right to a small blue square
+a big blue square is left to a small red square
+a big blue square is right to a small red square
+a big blue square is left to a small green square
+a big blue square is right to a small green square
+a big blue square is left to a big blue square
+a big blue square is right to a big blue square
+a big blue square is left to a big red square
+a big blue square is right to a big red square
+a big blue square is left to a big green square
+a big blue square is right to a big green square
+a big red square is left to a small blue triangle
+a big red square is right to a small blue triangle
+a big red square is left to a small red triangle
+a big red square is right to a small red triangle
+a big red square is left to a small green triangle
+a big red square is right to a small green triangle
+a big red square is left to a big blue triangle
+a big red square is right to a big blue triangle
+a big red square is left to a big red triangle
+a big red square is right to a big red triangle
+a big red square is left to a big green triangle
+a big red square is right to a big green triangle
+a big red square is left to a small blue circle
+a big red square is right to a small blue circle
+a big red square is left to a small red circle
+a big red square is right to a small red circle
+a big red square is left to a small green circle
+a big red square is right to a small green circle
+a big red square is left to a big blue circle
+a big red square is right to a big blue circle
+a big red square is left to a big red circle
+a big red square is right to a big red circle
+a big red square is left to a big green circle
+a big red square is right to a big green circle
+a big red square is left to a small blue square
+a big red square is right to a small blue square
+a big red square is left to a small red square
+a big red square is right to a small red square
+a big red square is left to a small green square
+a big red square is right to a small green square
+a big red square is left to a big blue square
+a big red square is right to a big blue square
+a big red square is left to a big red square
+a big red square is right to a big red square
+a big red square is left to a big green square
+a big red square is right to a big green square
+a big green square is left to a small blue triangle
+a big green square is right to a small blue triangle
+a big green square is left to a small red triangle
+a big green square is right to a small red triangle
+a big green square is left to a small green triangle
+a big green square is right to a small green triangle
+a big green square is left to a big blue triangle
+a big green square is right to a big blue triangle
+a big green square is left to a big red triangle
+a big green square is right to a big red triangle
+a big green square is left to a big green triangle
+a big green square is right to a big green triangle
+a big green square is left to a small blue circle
+a big green square is right to a small blue circle
+a big green square is left to a small red circle
+a big green square is right to a small red circle
+a big green square is left to a small green circle
+a big green square is right to a small green circle
+a big green square is left to a big blue circle
+a big green square is right to a big blue circle
+a big green square is left to a big red circle
+a big green square is right to a big red circle
+a big green square is left to a big green circle
+a big green square is right to a big green circle
+a big green square is left to a small blue square
+a big green square is right to a small blue square
+a big green square is left to a small red square
+a big green square is right to a small red square
+a big green square is left to a small green square
+a big green square is right to a small green square
+a big green square is left to a big blue square
+a big green square is right to a big blue square
+a big green square is left to a big red square
+a big green square is right to a big red square
+a big green square is left to a big green square
+a big green square is right to a big green square
