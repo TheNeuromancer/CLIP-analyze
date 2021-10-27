@@ -44,11 +44,11 @@ if args.save_embs:
     else:
         os.makedirs(out_dir)
 
-all_img_fns = glob(f"{args.root_path}/original_images/{args.folder}/*")
+all_img_fns = glob(f"{args.root_path}/stimuli/original_images/{args.folder}/*")
 all_img_fns = [f"{op.basename(fn)}" for fn in all_img_fns]
 # all_img_fns = augment_text_with_colors(all_img_fns)
 all_captions = [fn[2:-4].lower() for fn in all_img_fns] # remove first 2 char (= 'a ')
-all_folders = glob(f"{op.dirname(args.root_path)}/images/*")
+all_folders = glob(f"{op.dirname(args.root_path)}/stimuli/images/*")
 all_folders = [f"{op.basename(fn)}" for fn in all_folders]
 print(f"Found {len(all_folders)} folders of images")
 # print(all_img_fns)
@@ -90,7 +90,7 @@ if args.save_embs:
 with torch.no_grad():
     for folder in tqdm(all_folders[0]):
         start = time.time()
-        images = [Image.open(f"{args.root_path}/images/{folder}/{fn}") for fn in all_img_fns]
+        images = [Image.open(f"{args.root_path}/stimuli/images/{folder}/{fn}") for fn in all_img_fns]
         inputs = processor(text=all_captions, images=images, return_tensors="pt", padding=True)
         outputs = model(**inputs, output_hidden_states=args.save_embs, return_dict=True)
         if args.save_embs:

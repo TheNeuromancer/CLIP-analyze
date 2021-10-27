@@ -23,7 +23,7 @@ from utils import *
 
 parser = argparse.ArgumentParser(description='Encoding on CLIP embeddings')
 parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
-parser.add_argument('-f', '--folder', default='embeddings/', help='stimuli folder')
+parser.add_argument('-f', '--emb-folder', default='embeddings/', help='embeddings folder')
 parser.add_argument('-v', '--version', default='hug_v2/', help='script version')
 parser.add_argument('-i', '--in-file', default='all_txt_embs', help='input file: txt or img')
 parser.add_argument('-n', '--ncolors', default=3, type=int, help='total number of colors')
@@ -33,7 +33,7 @@ parser.add_argument('--cat-or-last', default='last', help='whether to use all se
 args = parser.parse_args()
 
 
-all_img_fns = glob(f"{args.root_path}/original_images/scene/*")
+all_img_fns = glob(f"{args.root_path}/{emb_folder}/original_images/scene/*")
 all_sents = [f"{op.basename(fn)}" for fn in all_img_fns]
 if "img" in args.in_file and args.ncolors > 3:
     print("Cannot add new colors to images ... exiting")
