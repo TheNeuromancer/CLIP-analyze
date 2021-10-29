@@ -23,7 +23,6 @@ parser = argparse.ArgumentParser(description='Ranking images and desriptions wit
 parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
 parser.add_argument('-f', '--folder', default='scene', help='stimuli folder')
 parser.add_argument('--remove-sides', action='store_true', help='remove left and right, just and "X and Y"')
-parser.add_argument('--save-embs', action='store_true', help='remove left and right, just and "X and Y"')
 parser.add_argument('--embs-out-fn', default='hug_v1', help='output directory for embeddings')
 parser.add_argument('-w', '--overwrite', action='store_true', help='whether to overwrite the output directory or not')
 args = parser.parse_args()
@@ -33,16 +32,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
-if args.save_embs:
-    out_dir = f"{args.root_path}/embeddings/{args.embs_out_fn}"
-    if op.exists(out_dir):
-        if args.overwrite:
-            print(f"Output directory already exists ... overwriting")
-        else:
-            print(f"Output directory already exists and args.overwrite is set to False ... exiting")
-            exit()
-    else:
-        os.makedirs(out_dir)
 
 all_img_fns = glob(f"{args.root_path}/stimuli/original_images/{args.folder}/*")
 all_img_fns = [f"{op.basename(fn)}" for fn in all_img_fns]
@@ -96,20 +85,9 @@ with torch.no_grad():
         if args.save_embs:
             # all_txt_embs.append(torch.stack(outputs.text_model_output.hidden_states).numpy()) # way to big to save all
             # all_img_embs.append(torch.stack(outputs.vision_model_output.hidden_states).numpy())
-            all_txt_embs_seq.append(outputs.text_model_output.last_hidden_state.numpy()) # embeddings for all items in the sequence 
-            all_txt_embs.append(outputs.text_model_output.pooler_output.numpy()) # pooled outputs, ie emb of the [CLS] token, after linear transform and tanh.
-            all_img_embs.append(outputs.vision_model_output.pooler_output.numpy())
         logits_per_image = outputs.logits_per_image # this is the image-text similarity score
         all_logits.append(logits_per_image.cpu())
         # print(f"took {time.time() - start:.2f}s on device {device}")
-
-if args.save_embs:
-    # embs_to_save = np.array([emb.numpy() for emb in all_image_features])
-    ## Shape n_data_augmentation * n_layers * n_trials (162) * sequence length (50 for images) * n_hidden (768)
-    np.save(f"{out_dir}/txt_embs.npy", np.array(all_txt_embs))
-    np.save(f"{out_dir}/txt_embs_seq.npy", np.array(all_txt_embs_seq))
-    np.save(f"{out_dir}/img_embs.npy", np.array(all_img_embs))
-
 
 final_logits = torch.stack(all_logits).mean(0).softmax(dim=1) # we can take the softmax to get the label probabilities
 
