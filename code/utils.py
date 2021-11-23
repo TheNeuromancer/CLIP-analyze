@@ -21,6 +21,8 @@ def get_inverse_sentence(sentence, sep):
         mirror_sent = mirror_sent.replace("right", "left")
     elif "left" in sentence:
         mirror_sent = mirror_sent.replace("left", "right")
+    else:
+        raise RuntimeError
     return mirror_sent
 
 
@@ -34,6 +36,18 @@ def accuracy(output, all_targets, topk=(1,)):
     # remove duplicate for top>1
     correct = correct.cumsum(axis=0).cumsum(axis=0) == 1 
     return [float(correct[:k].reshape(-1).float().sum(0, keepdim=True).cpu().numpy()) for k in topk]
+
+
+def accuracy_all_sents(output, all_targets, topk=(1,)):
+    pred = output.topk(max(topk), 1, True, True)[1].t()
+    all_corrects = []
+    for i in range(all_targets.shape[1]): # nb of possible label for each image
+        correct = pred.eq(all_targets[:,i].view(1, -1).expand_as(pred))
+        all_corrects.append(correct)
+    correct = torch.logical_or(*all_corrects)
+    # remove duplicate for top>1
+    correct = correct.cumsum(axis=0).cumsum(axis=0) == 1 
+    return [float(correct[:k].reshape(-1).float().cpu().numpy()) for k in topk]
 
 
 def zeroshot_classifier(classnames, templates, model, device):

@@ -20,7 +20,8 @@ plt.ion()
 from utils import *
 
 parser = argparse.ArgumentParser(description='Ranking images and desriptions with CLIP')
-parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
+# parser.add_argument('-r', '--root-path', default='/private/home/tdesbordes/codes/CLIP-analyze/', help='root path')
+parser.add_argument('-r', '--root-path', default='/Users/tdesbordes/Documents/CLIP-analyze/', help='root path')
 parser.add_argument('-f', '--folder', default='scene', help='stimuli folder')
 parser.add_argument('--remove-sides', action='store_true', help='remove left and right, just and "X and Y"')
 parser.add_argument('--embs-out-fn', default='hug_v1', help='output directory for embeddings')
@@ -37,9 +38,15 @@ all_img_fns = glob(f"{args.root_path}/stimuli/original_images/{args.folder}/*")
 all_img_fns = [f"{op.basename(fn)}" for fn in all_img_fns]
 # all_img_fns = augment_text_with_colors(all_img_fns)
 all_captions = [fn[2:-4].lower() for fn in all_img_fns] # remove first 2 char (= 'a ')
-all_folders = glob(f"{op.dirname(args.root_path)}/stimuli/images/*")
-all_folders = [f"{op.basename(fn)}" for fn in all_folders]
-print(f"Found {len(all_folders)} folders of images")
+
+# img_path = f"{args.root_path}/stimuli/images"
+# all_folders = glob(f"{op.dirname(args.root_path)}/stimuli/images/*")
+# all_folders = [f"{op.basename(fn)}" for fn in all_folders]
+# print(f"Found {len(all_folders)} folders of images")
+
+img_path = f"{args.root_path}/stimuli/original_images/scene"
+all_folders = [[img_path]]
+print(f"Using original images")
 # print(all_img_fns)
 # print(all_captions)
 separator = " to the X of a "
@@ -56,6 +63,7 @@ for i, cap in enumerate(all_captions):
     for idx in [i for i, x in enumerate(all_captions) if x == mirror_sent]:
         all_labels[-1].append(idx)
 all_labels = torch.tensor(all_labels)
+print(all_labels.shape)
 # np.random.shuffle(all_captions)
 print(all_captions[12])
 print(all_captions[104])
@@ -72,25 +80,19 @@ templates = ["a bad photo of a {}.",
 
 #### LOOPS OVER DATA AUGMENTATION (one folder contains the whole dataset for one augmentation)
 all_logits = []
-if args.save_embs: 
-    all_img_embs = []
-    all_txt_embs = []
-    all_txt_embs_seq = []
 with torch.no_grad():
     for folder in tqdm(all_folders[0]):
         start = time.time()
-        images = [Image.open(f"{args.root_path}/stimuli/images/{folder}/{fn}") for fn in all_img_fns]
+        images = [Image.open(f"{folder}/{fn}") for fn in all_img_fns]
+        images = [im.convert('RGB') for im in images]
         inputs = processor(text=all_captions, images=images, return_tensors="pt", padding=True)
-        outputs = model(**inputs, output_hidden_states=args.save_embs, return_dict=True)
-        if args.save_embs:
-            # all_txt_embs.append(torch.stack(outputs.text_model_output.hidden_states).numpy()) # way to big to save all
-            # all_img_embs.append(torch.stack(outputs.vision_model_output.hidden_states).numpy())
+        outputs = model(**inputs, output_hidden_states=False, return_dict=True)
         logits_per_image = outputs.logits_per_image # this is the image-text similarity score
         all_logits.append(logits_per_image.cpu())
         # print(f"took {time.time() - start:.2f}s on device {device}")
 
 final_logits = torch.stack(all_logits).mean(0).softmax(dim=1) # we can take the softmax to get the label probabilities
-
+set_trace()
 topk = (1,2,3,5,10)
 accs = accuracy(final_logits, all_labels, topk=topk)
 
