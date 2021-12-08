@@ -1,8 +1,10 @@
+figures/
 embeddings/
 results/
 images/
 original_images
 stimuli/
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
