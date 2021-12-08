@@ -4,6 +4,7 @@ results/
 images/
 original_images
 stimuli/
+code/core
 *.csv
 
 # Byte-compiled / optimized / DLL files

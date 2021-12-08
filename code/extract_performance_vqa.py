@@ -1,3 +1,4 @@
+# Does't work on GPU
 from PIL import Image
 import numpy as  np
 import os
@@ -10,6 +11,8 @@ clip_processor = CLIPProcessor.from_pretrained('openai/clip-vit-base-patch32')
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-multilingual-uncased')
 model = FlaxCLIPVisionBertForSequenceClassification.from_pretrained('flax-community/clip-vision-bert-vqa-ft-6k')
 
+path_to_images = '../stimuli/images/original_meg_images/scene' 
+image_fns = os.listdir(path_to_images)
 
 targets = ["red triangle", "green triangle" "blue triangle", "red square", "green square" "blue square", "red circle", "green circle" "blue circle"] 
 perf_dict = {}
@@ -17,21 +20,16 @@ for target in targets:
     text = f"Is there a {target} in the image?"
     # text = "Y-a-t'il un triangle bleu dans l'image ?"
     tokens = tokenizer([text], return_tensors="np")
-    image_fns = os.listdir('../stimuli/original_images/scene')
 
     perf = []
     for img_fn in tqdm(image_fns):
-        img_path = os.path.join('../stimuli/original_images/scene', img_fn)
+        img_path = os.path.join(path_to_images, img_fn)
         img = Image.open(img_path).convert('RGB')
         clip_outputs = clip_processor(images=img)
         clip_outputs['pixel_values'][0] = clip_outputs['pixel_values'][0].transpose(1,2,0) # Need to transpose images as model expected channel last images.
         pixel_values = np.concatenate([clip_outputs['pixel_values']])
         outputs = model(pixel_values=pixel_values, **tokens)
         preds = outputs.logits[0]
-        # sorted_indices = np.argsort(preds)[::-1] # Get reverse sorted scores
-        # top_5_indices = sorted_indices[:5]
-        # top_5_tokens = list(map(model.config.id2label.get,top_5_indices))
-        # top_5_scores = preds[top_5_indices]
         pred_idx = np.argmax(preds)
         pred = model.config.id2label[pred_idx.item()]
         if target in img_fn:
