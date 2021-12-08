@@ -14,7 +14,7 @@ model = FlaxCLIPVisionBertForSequenceClassification.from_pretrained('flax-commun
 path_to_images = '../stimuli/images/original_meg_images/scene' 
 image_fns = os.listdir(path_to_images)
 
-targets = ["red triangle", "green triangle" "blue triangle", "red square", "green square" "blue square", "red circle", "green circle" "blue circle"] 
+targets = ["red triangle", "green triangle", "blue triangle", "red square", "green square", "blue square", "red circle", "green circle", "blue circle"] 
 perf_dict = {}
 for target in targets:
     print(f"doing target {target}")
