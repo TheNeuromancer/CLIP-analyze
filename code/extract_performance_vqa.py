@@ -17,6 +17,7 @@ image_fns = os.listdir(path_to_images)
 targets = ["red triangle", "green triangle" "blue triangle", "red square", "green square" "blue square", "red circle", "green circle" "blue circle"] 
 perf_dict = {}
 for target in targets:
+    print(f"doing target {target}")
     text = f"Is there a {target} in the image?"
     # text = "Y-a-t'il un triangle bleu dans l'image ?"
     tokens = tokenizer([text], return_tensors="np")
@@ -49,7 +50,7 @@ for target in targets:
                 perf.append(0)
                 print(pred)
     perf_dict[target] = perf
-    print(f"Performance for target: {target} = {np.mean(perf)}")
+    print(f"Performance for target: {target} = {np.mean(perf)}", "\n")
 
 set_trace()
 
