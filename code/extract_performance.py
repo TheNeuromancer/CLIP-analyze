@@ -19,19 +19,19 @@ parser = argparse.ArgumentParser(description='extract text embeddings from CLIP 
 parser.add_argument('-r', '--root-path', default='/Users/tdesbordes/Documents/CLIP-analyze/', help='root path')
 parser.add_argument('-d', '--image-input-dir', default='original_meg_images/scene', help='stimuli file (should be in {args.root_path}/stimuli/images')
 parser.add_argument('--out-dir', default='hug_v3', help='output directory for results')
-parser.add_argument('-m ', '--model', default='clip-vit-base-patch32', help='type of model')
+parser.add_argument('-m ', '--model', default='openai/clip-vit-base-patch32', help='type of model') # openai/clip-vit-base-patch32, M-CLIP/M-BERT-Base-69, flax-community/clip-rsicd-v2
 parser.add_argument('-w', '--overwrite', action='store_true', default=False, help='whether to overwrite the output directory or not')
 args = parser.parse_args()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-model = CLIPModel.from_pretrained(f"openai/{args.model}")
-processor = CLIPProcessor.from_pretrained(f"openai/{args.model}")
+model = CLIPModel.from_pretrained(args.model)
+processor = CLIPProcessor.from_pretrained(args.model)
 
 # Setup outputs
 out_dir = f"{args.root_path}/results/behavior/{args.out_dir}"
 if not op.exists(out_dir): os.makedirs(out_dir)
 
-out_fn = f"{args.model.replace('-', '_')}_{args.image_input_dir.replace('/', '_')}-2obj"
+out_fn = f"{args.model.replace('/', '_')}_{args.image_input_dir.replace('/', '_')}-2obj"
 if op.exists(f"{out_dir}/{out_fn}.npy"):
     if args.overwrite:
         print(f"Output file already exists ... overwriting")
@@ -46,19 +46,6 @@ all_imgs = [Image.open(f"{args.root_path}/stimuli/images/{args.image_input_dir}/
 all_imgs = [im.convert('RGB') for im in all_imgs]
 all_sentences = [s[0:-4].lower() for s in all_imgs_fns]
 all_sentences = [s.replace("to the left of", "is left to").replace("to the right of", "is right to") for s in all_sentences]
-separator = " is X to "
-
-# i dont think you need that
-# # get all correct labels for each image: the "classic" one and the one resulting from inversing the relation (left/right)
-# all_sentences = []
-# print(img_labels[0])
-# for i, cap in enumerate(img_labels):
-#     all_sentences.append([i])
-#     mirror_sent = get_inverse_sentence(cap, separator)
-#     for idx in [i for i, x in enumerate(img_labels) if x == mirror_sent]:
-#         all_sentences[-1].append(idx)
-# all_sentences = torch.tensor(all_sentences)
-# print(all_sentences)
 
 shapes = ["triangle", "square", "circle"]
 colors = ["blue", "red", "green"]
@@ -66,6 +53,7 @@ positions = {"S1": 2, "C1": 1, "S2": 8, "C2": 7}
 
 def get_property_mismatch(sent):
     viol = np.random.choice(("S1", "C1", "S2", "C2"))
+    changed_property = "Shape" if viol[0]=='S' else "Color"
     words = sent.split()
     old_value = words[positions[viol]]
     if viol[0] == "S": # shape
@@ -74,7 +62,7 @@ def get_property_mismatch(sent):
         words[positions[viol]] = np.random.choice([c for c in colors if c != old_value])
     violation_position = positions[viol]
     violation_side = "Left" if (violation_position < 3 and "left" in sent) or (violation_position > 3 and "right" in sent) else "Right"
-    return " ".join(words), violation_position, violation_side
+    return " ".join(words), violation_position, violation_side, changed_property
 
 def get_binding_mismatch(sent):
     words = sent.split()
@@ -156,13 +144,15 @@ binding_mismatches = []
 relation_mismatches = []
 property_mismatch_position = []
 property_mismatch_side = []
+changed_properties = []
 for sent in all_sentences:
-    property_mismatch, violation_position, violation_side = get_property_mismatch(sent)
+    property_mismatch, violation_position, violation_side, changed_property = get_property_mismatch(sent)
     property_mismatches.append(property_mismatch)
     property_mismatch_position.append(violation_position)
     property_mismatch_side.append(violation_side)
     binding_mismatches.append(get_binding_mismatch(sent))
     relation_mismatches.append(get_relation_mismatch(sent))
+    changed_properties.append(changed_property)
 
 # get unviolated features
 Shape1, Color1, Shape2, Color2, Relation, D, Nb_shared, Sharing = get_all_features(all_sentences)
@@ -197,7 +187,9 @@ with torch.no_grad():
         similarity_property.append(outputs['logits_per_image'][0][1].item())
         similarity_binding.append(outputs['logits_per_image'][0][2].item())
         similarity_relation.append(outputs['logits_per_image'][0][3].item())
-
+        # The model is run for a single sentence and one instance of each violatioh
+        # results are stored separately, then put in a copy of the original dataframe, 
+        # and then concatenated
 
 print(f"Done in {time.time() - start_time:.2f}s")
 print(f"Average Performance is: {np.mean(Perf)}")
@@ -216,6 +208,7 @@ df_true["similarity"] = similarity_true
 df_true["Violation"] = "No"
 df_true["Error_type"] = "None"
 df_true["Violation on"] = "None"
+df_true["Changed property"] = "None"
 df_true["sentences"] = all_sentences
 df_true["property_mismatches_positions"] = ["None" for s in all_sentences]
 df_true["property_mismatches_order"] = ["None" for s in all_sentences]
@@ -235,6 +228,7 @@ df_property["similarity"] = similarity_property
 df_property["Violation"] = "Yes"
 df_property["Error_type"] = "l0"
 df_property["Violation on"] = "property"
+df_property["Changed property"] = changed_properties
 df_property["sentences"] = property_mismatches
 df_property["property_mismatches_positions"] = property_mismatch_position
 df_property["property_mismatches_order"] = ["First" if p<3 else "Second" for p in property_mismatch_position ]
@@ -259,6 +253,7 @@ df_binding["similarity"] = similarity_binding
 df_binding["Violation"] = "Yes"
 df_binding["Error_type"] = "l1"
 df_binding["Violation on"] = "binding"
+df_true["Changed property"] = "None"
 df_binding["sentences"] = binding_mismatches
 df_binding["property_mismatches_positions"] = ["None" for s in all_sentences]
 df_binding["property_mismatches_order"] = ["None" for s in all_sentences]
@@ -283,6 +278,7 @@ df_relation["similarity"] = similarity_relation
 df_relation["Violation"] = "Yes"
 df_relation["Error_type"] = "l2"
 df_relation["Violation on"] = "relation"
+df_true["Changed property"] = "None"
 df_relation["sentences"] = relation_mismatches
 df_relation["property_mismatches_positions"] = ["None" for s in all_sentences]
 df_relation["property_mismatches_order"] = ["None" for s in all_sentences]
@@ -303,5 +299,8 @@ df = pd.concat((df_true, df_property, df_binding, df_relation))
 df.reset_index(inplace=True, drop=True) # reset index
 df["Error rate"] = np.logical_not(df["Perf"]).astype(float)
 df.to_csv(f"{out_dir}/{out_fn}.csv")
-set_trace()
+print(f"Average Performance for property is: {df_property.Perf.mean()}")
+print(f"Average Performance for binding is: {df_binding.Perf.mean()}")
+print(f"Average Performance for relation is: {df_relation.Perf.mean()}")
+# set_trace()
 print("All done")

@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(description='extract text embeddings from CLIP 
 parser.add_argument('-r', '--root-path', default='/Users/tdesbordes/Documents/CLIP-analyze/', help='root path')
 parser.add_argument('-d', '--results-dir', default='hug_v3', help='directry to get results and store figures')
 parser.add_argument('-w', '--overwrite', action='store_true', default=False, help='whether to overwrite the output directory or not')
+model_data_fn = "openai-RN50x16_original_meg_images"
 args = parser.parse_args()
 
 
@@ -62,11 +63,11 @@ out_dir = Path(f"{args.root_path}/figures/{args.results_dir}/")
 out_dir.mkdir(parents=True, exist_ok=True)
 
 results_dir = Path(f"{args.root_path}/results/behavior/{args.results_dir}/")
-path_1obj = list(results_dir.glob("*-1obj.csv"))
+path_1obj = list(results_dir.glob(f"{model_data_fn}_object-1obj.csv"))
 print(path_1obj)
 results_1obj = pd.read_csv(path_1obj[0], encoding='ISO-8859-1')
 
-path_2obj = list(results_dir.glob("*-2obj.csv"))
+path_2obj = list(results_dir.glob(f"{model_data_fn}_scene-2obj.csv"))
 print(path_2obj)
 results_2obj = pd.read_csv(path_2obj[0], encoding='ISO-8859-1')
 print("loaded")
@@ -93,20 +94,52 @@ results_2obj["Violation ordinal position"] = results_2obj["property_mismatches_o
 
 print("starting")
 box_pairs = []
-# set_trace()
 
 default_colors = sns.color_palette()
+
+
+sns.histplot(results_2obj, x="similarity", hue="Violation")
+plt.savefig(f'{out_dir}/similarity_distribution_Violation.png')
+plt.close()
+
+sns.histplot(results_2obj, x="similarity", hue="Error_type")
+plt.savefig(f'{out_dir}/similarity_distribution_Error_type.png')
+plt.close()
+
+# each error type
+sns.histplot(results_2obj.query("Error_type in ['None', 'l0']"), x="similarity", hue="Error_type")
+plt.savefig(f'{out_dir}/similarity_distribution_Error_type_l0.png')
+plt.close()
+sns.histplot(results_2obj.query("Error_type in ['None', 'l1']"), x="similarity", hue="Error_type")
+plt.savefig(f'{out_dir}/similarity_distribution_Error_type_l1.png')
+plt.close()
+sns.histplot(results_2obj.query("Error_type in ['None', 'l2']"), x="similarity", hue="Error_type")
+plt.savefig(f'{out_dir}/similarity_distribution_Error_type_l2.png')
+plt.close()
+
+
+sns.histplot(results_2obj.query("Violation=='No'"), x="similarity", hue="# Shared features")
+plt.savefig(f'{out_dir}/similarity_distribution_#_Shared_features.png')
+plt.close()
+
+
+criterion = 33.5
+results_2obj["choice"] = results_2obj["similarity"].apply(lambda x: x > criterion)
+perf = results_2obj.apply(lambda x: 1 if (x['choice'] and x['Violation']=='No') or (not x['choice'] and x['Violation']=='Yes') else 0, axis=1)
+
+
+set_trace()
 
 ##################
 #### OVERALL #####
 ##################
 ## Error rate are intersting, but similarity between unvilated sentences is not informative. 
-make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='Error rate', dodge=.2, kind='point', out_fn=f'{out_dir}/stat_overall_errorrate_point_dodge.png')
-# make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='similarity', dodge=.2, kind='point', out_fn=f'{out_dir}/stat_overall_similarity_point_dodge.png')
+# make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='Error rate', dodge=.2, kind='point', out_fn=f'{out_dir}/stat_overall_errorrate_point_dodge.png')
+make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='similarity', dodge=.2, kind='point', out_fn=f'{out_dir}/stat_overall_similarity_point_dodge.png')
 
 # split by violation
-make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='Error rate', dodge=.02, col='Violation', kind='point', out_fn=f'{out_dir}/stat_overall*violation_errorrate_point_dodge.png')
-# make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='similarity', dodge=.02, col='Violation', kind='point', out_fn=f'{out_dir}/stat_overall*violation_similarity_point_dodge.png')
+# make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='Error rate', dodge=.02, col='Violation', kind='point', out_fn=f'{out_dir}/stat_overall*violation_errorrate_point_dodge.png')
+make_sns_barplot(deepcopy(results).query("Violation=='No'"), x='Trial type', y='similarity', dodge=.02, col='Violation', kind='point', out_fn=f'{out_dir}/stat_overall*violation_similarity_point_dodge.png')
 
 
 ##################

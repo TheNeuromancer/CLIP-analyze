@@ -1,4 +1,4 @@
-from transformers import CLIPProcessor, CLIPModel
+import clip
 import torch
 import argparse
 from glob import glob
@@ -19,19 +19,18 @@ parser = argparse.ArgumentParser(description='extract text embeddings from CLIP 
 parser.add_argument('-r', '--root-path', default='/Users/tdesbordes/Documents/CLIP-analyze/', help='root path')
 parser.add_argument('-d', '--image-input-dir', default='original_meg_images/object', help='stimuli file (should be in {args.root_path}/stimuli/images')
 parser.add_argument('--out-dir', default='hug_v3', help='output directory for results')
-parser.add_argument('-m ', '--model', default='openai/clip-vit-base-patch32', help='type of model')
+parser.add_argument('-m ', '--model', default='RN50x16', help='type of model')
 parser.add_argument('-w', '--overwrite', action='store_true', default=False, help='whether to overwrite the output directory or not')
 args = parser.parse_args()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-model = CLIPModel.from_pretrained(args.model)
-processor = CLIPProcessor.from_pretrained(args.model)
+model, preprocess = clip.load(args.model, device=device)
 
 # Setup outputs
 out_dir = f"{args.root_path}/results/behavior/{args.out_dir}"
 if not op.exists(out_dir): os.makedirs(out_dir)
 
-out_fn = f"{args.model.replace('/', '_')}_{args.image_input_dir.replace('/', '_')}-1obj"
+out_fn = f"openai-{args.model.replace('/', '_')}_{args.image_input_dir.replace('/', '_')}-1obj"
 if op.exists(f"{out_dir}/{out_fn}.npy"):
     if args.overwrite:
         print(f"Output file already exists ... overwriting")
@@ -116,9 +115,9 @@ out_dict["Sharing"] = Sharing
 out_dict["sent_id"] = [f"1obj-{i}" for i in np.arange(len(all_sentences))]
 
 
-similarity_true = []
-similarity_shape_change = []
-similarity_color_change = []
+# similarity_true = []
+# similarity_shape_change = []
+# similarity_color_change = []
 Perf = []
 ## Run the model
 with torch.no_grad():
@@ -126,12 +125,34 @@ with torch.no_grad():
     print(f"Starting processing {len(all_sentences)}*4 sentences and {len(all_imgs)} images")
 
     for img, sent, shape_change, color_change in zip(all_imgs, all_sentences, shape_change_mismatches, color_change_mismatches):
-        inputs = processor(text=(sent, shape_change, color_change), images=img, return_tensors="pt", padding=True)
-        outputs = model(**inputs, output_hidden_states=False, return_dict=True)
-        Perf.append(1 if outputs['logits_per_image'].argmax().item()==0 else 0)
-        similarity_true.append(outputs['logits_per_image'][0][0].item())
-        similarity_shape_change.append(outputs['logits_per_image'][0][1].item())
-        similarity_color_change.append(outputs['logits_per_image'][0][2].item())
+        image = preprocess(img).unsqueeze(0).to(device)
+        text = clip.tokenize((sent, shape_change, color_change)).to(device)
+
+        logits_per_image, logits_per_text = model(image, text)
+        probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+
+        Perf.append(1 if probs.argmax().item()==0 else 0)
+
+        # similarity_true.append(probs[0][0].item())
+        # similarity_shape_change.append(probs[0][1].item())
+        # similarity_color_change.append(probs[0][2].item())
+
+    # proper way to get similarities
+    n_sents = len(all_sentences)
+    all_input_sents = all_sentences + shape_change_mismatches + color_change_mismatches
+    image_inputs = torch.stack([preprocess(img) for img in all_imgs]).to(device)
+    text_inputs = clip.tokenize(all_input_sents).to(device)
+
+    image_features = model.encode_image(image_inputs)
+    text_features = model.encode_text(text_inputs)
+    image_features /= image_features.norm(dim=-1, keepdim=True)
+    text_features /= text_features.norm(dim=-1, keepdim=True)
+    all_similarities = (100.0 * image_features @ text_features.T) #.softmax(dim=-1)
+    similarity_true = np.diag(all_similarities[:,0:n_sents]).tolist()
+    similarity_shape_change = np.diag(all_similarities[:,n_sents:n_sents*2]).tolist()
+    similarity_color_change = np.diag(all_similarities[:,n_sents*2:n_sents*3]).tolist()
+   
+
 
 
 print(f"Done in {time.time() - start_time:.2f}s")
